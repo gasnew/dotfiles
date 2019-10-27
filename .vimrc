@@ -26,14 +26,12 @@ Plug 'honza/vim-snippets'
 Plug 'janko-m/vim-test'
 Plug 'jeetsukumaran/vim-buffergator'
 Plug 'junegunn/vim-easy-align'
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'mbbill/undotree'
 Plug 'mileszs/ack.vim'
 Plug 'mtth/scratch.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'w0rp/ale'
-Plug 'SirVer/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-surround'
@@ -119,10 +117,6 @@ set smartcase
 " This unsets the "last search pattern" register by hitting return
 nnoremap <CR> :noh<CR>
 
-" Tag completion using excuberant ctags
-set tags=tags;/
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip*/.git/*,*/.bundle/*,*/coverage/*,*/public/*,*/log/*,*/vendor/*,*/doc/*,*.o,*.obj,.git,node_modules/**,bower_components/**,**/node_modules/**,_build/**,deps/**,*.beam
-
 " Move around tags with Ctrl and g and t
 map <C-g> :tabprevious<CR>
 map <C-t> :tabnext<CR>
@@ -146,11 +140,6 @@ nnoremap <leader><leader> <c-^> " Switch between the last two files
 " EasyAlign settings
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-
-" UltiSnips settings
-let g:UltiSnipsExpandTrigger = "<leader><tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " Solarized color scheme
 syntax enable
