@@ -120,8 +120,8 @@ nnoremap <CR> :noh<CR>
 " Move around tags with Ctrl and g and t
 map <C-g> :tabprevious<CR>
 map <C-t> :tabnext<CR>
-map <C-x> :tabclose<CR>
-map <C-i> :tabnew<CR>
+map <leader>x :tabclose<CR>
+map <leader>i :tabnew<CR>
 
 " Move around windows with Ctrl and movement keys
 map <C-j> <C-W>j
@@ -236,3 +236,8 @@ autocmd FileType ruby nmap <leader>h :%s/:\([^=,'"]*\) =>/\1:/gc<CR>
 " Markdown settings
 let g:vim_markdown_folding_disabled = 1
 
+" --- MAPPED MACROS ---
+" You can record a macro and then print it with Ctrl-R Ctrl-R <reg>
+
+" Search highlighted text
+vnoremap <leader>s y/"
