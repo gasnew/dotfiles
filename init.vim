@@ -43,6 +43,10 @@ Plug 'docunext/closetag.vim'
 Plug 'majutsushi/tagbar'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-abolish'
+"Plug 'ludovicchabant/vim-gutentags'
+" TODO: Try to make this work sometime. I got stuck getting relative imports to
+" work because vim's working directory != the current file's directory.
+"Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 " Display
 Plug 'altercation/vim-colors-solarized'
@@ -78,6 +82,9 @@ Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 call plug#end()
 
 let mapleader = ";" " Leader
+" Repeat character search forward (we lose repeating the search backward, but
+" it's worth it to keep ; as the leader key)
+nnoremap , ;
 
 set backspace=2   " Make backspace behave like in other programs
 set colorcolumn=80 " Show column at 80
@@ -117,7 +124,7 @@ set smartcase
 " This unsets the "last search pattern" register by hitting return
 nnoremap <CR> :noh<CR>
 
-" Move around tags with Ctrl and g and t
+" Move around tabs with Ctrl and g and t
 map <C-g> :tabprevious<CR>
 map <C-t> :tabnext<CR>
 map <leader>x :tabclose<CR>
@@ -167,6 +174,11 @@ let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 " ALE
 nnoremap <leader>f :ALEFix<CR>
 
+" Quick write and quit
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+
+"let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
 let g:ale_linters = {
@@ -181,6 +193,7 @@ let g:ale_fixers = {
 \ 'python': ['black'],
 \ 'ruby': ['rubocop'],
 \ 'json': ['prettier'],
+\ 'css': ['prettier'],
 \}
 let g:ale_javascript_eslint_use_global = 1
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5'
@@ -209,8 +222,55 @@ let g:buffergator_viewport_split_policy = 'R'
 " Gitgutter settings
 let g:gitgutter_max_signs = 10000
 
+" ctags
+set tags=./tags,tags;$HOME
+set wildignore+=*node_modules/**
+
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
+" make it work with typescript
+let g:tagbar_type_typescript = {
+  \ 'ctagstype': 'typescript',
+  \ 'kinds': [
+    \ 'c:class',
+    \ 'n:namespace',
+    \ 'f:function',
+    \ 'G:generator',
+    \ 'v:variable',
+    \ 'm:method',
+    \ 'p:property',
+    \ 'i:interface',
+    \ 'g:enum',
+    \ 't:type',
+    \ 'a:alias',
+  \ ],
+  \'sro': '.',
+    \ 'kind2scope' : {
+    \ 'c' : 'class',
+    \ 'n' : 'namespace',
+    \ 'i' : 'interface',
+    \ 'f' : 'function',
+    \ 'G' : 'generator',
+    \ 'm' : 'method',
+    \ 'p' : 'property',
+    \},
+\ }
+
+" TMP TODO: Remove this if I don't remember what it is
+"inoremap <expr> <c-x><c-f> fzf#vim#complete#path(
+    "\ "find . -path '*/\.*' -prune -o -print \| sed '1d;s:^..::'",
+    "\ fzf#wrap({'dir': expand('%:p:h')}))
+"imap <C-x><C-f> <Plug>RelativelyCompleteFile
+"let g:js_file_import_from_root = 0
+"autocmd BufEnter * silent! lcd %:p:h
+"set autochdir
+"set tagrelative
+"noremap <expr> <CR> pumvisible() ? '<C-X><C-F>':'<CR>'
+"map <CR> <C-X><C-F>
+"inoremap <expr> <cr> pumvisible()  ? complete_info()["selected"] != "-1"    ? "<c-y>" : "<c-e><cr>"  : "<cr>"
+
+" Enable mouse interaction for all modes
+set mouse=a
 
 " Turn on spell checking for certain files
 autocmd Bufread,BufNewFile *.md setlocal spell
@@ -247,3 +307,5 @@ let g:vim_markdown_folding_disabled = 1
 
 " Search highlighted text
 vnoremap <leader>s y/"
+vnoremap <leader>S y:Ag "
+nnoremap <leader>v oconsole.log(<esc>a);<esc>hi
