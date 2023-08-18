@@ -49,11 +49,13 @@ Plug 'tpope/vim-abolish'
 "Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 " Display
-Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
+Plug 'ellisonleao/gruvbox.nvim'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'flazz/vim-colorschemes'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-treesitter/nvim-treesitter'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -66,8 +68,12 @@ Plug 'vim-scripts/ruby-matchit', { 'for': 'ruby' }
 " Javascript
 Plug 'flowtype/vim-flow', { 'for': 'javascript' }
 
+" TypeScript
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+
 " Python
-Plug 'jmcantrell/vim-virtualenv', { 'for': 'python' }
+Plug 'plytophogy/vim-virtualenv', { 'for': 'python' }
 
 " Elm
 Plug 'elmcast/elm-vim'
@@ -149,13 +155,17 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 " Solarized color scheme
-syntax enable
+"syntax enable
+"set background=dark
+"if $SSH_CONNECTION
+"  let g:solarized_termcolors=256
+"  let g:solarized_termtrans=1
+"endif
+"colorscheme solarized
+
+" Gruvbox color scheme
 set background=dark
-if $SSH_CONNECTION
-  let g:solarized_termcolors=256
-  let g:solarized_termtrans=1
-endif
-colorscheme solarized
+colorscheme gruvbox
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -184,7 +194,7 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 let g:ale_linters = {
 \ 'javascript': ['eslint', 'flow'],
 \ 'ruby': ['rubocop', 'reek'],
-\ 'python': ['flake8', 'pylint'],
+\ 'python': ['flake8', 'pylint', 'mypy'],
 \}
 let g:ale_fixers = {
 \ 'javascript': ['prettier'],
@@ -197,7 +207,7 @@ let g:ale_fixers = {
 \}
 let g:ale_javascript_eslint_use_global = 1
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5'
-let g:ale_lint_delay = 2000
+let g:ale_lint_delay = 1500
 
 " Airline settings
 set guifont=Meslo\ LG\ M\ for\ Powerline
@@ -309,3 +319,5 @@ let g:vim_markdown_folding_disabled = 1
 vnoremap <leader>s y/"
 vnoremap <leader>S y:Ag "
 nnoremap <leader>v oconsole.log(<esc>a);<esc>hi
+
+lua require('config/treesitter')

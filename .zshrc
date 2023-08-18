@@ -1,6 +1,30 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Auto-load ssh keys
+zstyle :omz:plugins:ssh-agent identities id_ed25519
+plugins=(git ssh-agent)
+
 # Ansible managed
 # zsh version: 5.7.1
 # antigen version: 
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+bindkey -v
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/gnew/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
 
 export TERM="xterm-256color"
 export EDITOR="vim"
@@ -43,13 +67,16 @@ fi
 antigen bundle git
 antigen bundle joel-porquet/zsh-dircolors-solarized
 
-POWERLEVEL9K_INSTALLATION_PATH=$ANTIGEN_BUNDLES/bhilburn/powerlevel9k/powerlevel9k.zsh-theme
+# POWERLEVEL9K_INSTALLATION_PATH=$ANTIGEN_BUNDLES/bhilburn/powerlevel9k/powerlevel9k.zsh-theme
 
-antigen theme bhilburn/powerlevel9k powerlevel9k
+# antigen theme bhilburn/powerlevel9k powerlevel9k
 
 antigen apply
 
 ###
+
+source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 unsetopt share_history
 
@@ -57,44 +84,14 @@ unsetopt share_history
 autoload -Uz copy-earlier-word
 zle -N copy-earlier-word
 
-# hotkeys
-bindkey '\e[1~' beginning-of-line
-bindkey '\e[4~' end-of-line
-bindkey '^@' fzf-select-widget
-bindkey '^@.' fzf-edit-dotfiles
-bindkey '^@c' fzf-change-directory
-bindkey '^@f' fzf-edit-files
-bindkey '^@k' fzf-kill-processes
-bindkey '^@s' fzf-exec-ssh
-bindkey '^\' fzf-change-recent-directory
-bindkey '^r' fzf-insert-history
-bindkey '^xf' fzf-insert-files
-bindkey '^xd' fzf-insert-directory
-bindkey '^@g' fzf-select-git-widget
-bindkey '^@ga' fzf-git-add-files
-bindkey '^@gc' fzf-git-change-repository
-bindkey '^@gco' fzf-git-checkout-branch
-bindkey '^@gd' fzf-git-delete-branches
-bindkey '^@gh' fzf-select-github-widget
-bindkey '^@ghi' fzf-github-show-issue
-bindkey '^@ghe' fzf-github-edit-issue
-bindkey '^@gho' fzf-github-open-issue
-bindkey '^@ghc' fzf-github-close-issue
-bindkey '^@ghco' fzf-github-comment-issue
-bindkey '^@d' fzf-select-docker-widget
-bindkey '^@dk' fzf-docker-kill-containers
-bindkey '^@dl' fzf-docker-logs-container
-bindkey '^@dr' fzf-docker-remove-containers
-bindkey '^@dri' fzf-docker-remove-images
-bindkey '^@drv' fzf-docker-remove-volumes
-bindkey '^@dsa' fzf-docker-start-containers
-bindkey '^@dso' fzf-docker-stop-containers
-bindkey '^T' autosuggest-accept
-
 # aliases
 alias 'gs'="git status"
-alias 'gl'="git log"
+alias 'gc'="git commit"
 alias 'gch'="git checkout"
+alias 'gd'="git diff"
+alias 'ga'="git add"
+alias 'gl'="git log"
+alias 'gp'="git pull"
 
 # fzf
 export FZF_TMUX=0
@@ -172,10 +169,47 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Auto-load ssh keys
-plugins=(git ssh-agent)
-
 unset NPM_CONFIG_PREFIX
 export PATH="$PATH:$(yarn global bin)"
 
-source ~/.virtualenvs/dev/bin/activate
+# source ~/.virtualenvs/dev/bin/activate
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# hotkeys
+bindkey '\e[1~' beginning-of-line
+bindkey '\e[4~' end-of-line
+bindkey '^@' fzf-select-widget
+bindkey '^@.' fzf-edit-dotfiles
+bindkey '^@c' fzf-change-directory
+bindkey '^@f' fzf-edit-files
+bindkey '^@k' fzf-kill-processes
+bindkey '^@s' fzf-exec-ssh
+bindkey '^\' fzf-change-recent-directory
+bindkey '^r' fzf-insert-history
+bindkey '^xf' fzf-insert-files
+bindkey '^xd' fzf-insert-directory
+bindkey '^@g' fzf-select-git-widget
+bindkey '^@ga' fzf-git-add-files
+bindkey '^@gc' fzf-git-change-repository
+bindkey '^@gco' fzf-git-checkout-branch
+bindkey '^@gd' fzf-git-delete-branches
+bindkey '^@gh' fzf-select-github-widget
+bindkey '^@ghi' fzf-github-show-issue
+bindkey '^@ghe' fzf-github-edit-issue
+bindkey '^@gho' fzf-github-open-issue
+bindkey '^@ghc' fzf-github-close-issue
+bindkey '^@ghco' fzf-github-comment-issue
+bindkey '^@d' fzf-select-docker-widget
+bindkey '^@dk' fzf-docker-kill-containers
+bindkey '^@dl' fzf-docker-logs-container
+bindkey '^@dr' fzf-docker-remove-containers
+bindkey '^@dri' fzf-docker-remove-images
+bindkey '^@drv' fzf-docker-remove-volumes
+bindkey '^@dsa' fzf-docker-start-containers
+bindkey '^@dso' fzf-docker-stop-containers
+bindkey '^T' autosuggest-accept
+
