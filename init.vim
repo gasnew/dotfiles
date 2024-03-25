@@ -40,7 +40,7 @@ Plug 'vim-scripts/matchit.zip'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-repeat'
 Plug 'docunext/closetag.vim'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-abolish'
 "Plug 'ludovicchabant/vim-gutentags'
@@ -49,13 +49,13 @@ Plug 'tpope/vim-abolish'
 "Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 " Display
-"Plug 'altercation/vim-colors-solarized'
-Plug 'ellisonleao/gruvbox.nvim'
+Plug 'altercation/vim-colors-solarized'
+"Plug 'ellisonleao/gruvbox.nvim'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'flazz/vim-colorschemes'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'nvim-treesitter/nvim-treesitter'
+"Plug 'nvim-treesitter/nvim-treesitter'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -69,8 +69,8 @@ Plug 'vim-scripts/ruby-matchit', { 'for': 'ruby' }
 Plug 'flowtype/vim-flow', { 'for': 'javascript' }
 
 " TypeScript
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+"Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+"Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 
 " Python
 Plug 'plytophogy/vim-virtualenv', { 'for': 'python' }
@@ -80,6 +80,12 @@ Plug 'elmcast/elm-vim'
 
 " Reason
 Plug 'reasonml-editor/vim-reason-plus'
+
+" Rust
+"Plug 'neovim/nvim-lspconfig'
+"Plug 'hrsh7th/nvim-cmp'
+"Plug 'hrsh7th/cmp-nvim-lsp'
+"Plug 'simrat39/rust-tools.nvim'
 
 " Templating, markdown, etc.
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
@@ -155,17 +161,22 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 " Solarized color scheme
-"syntax enable
-"set background=dark
-"if $SSH_CONNECTION
-"  let g:solarized_termcolors=256
-"  let g:solarized_termtrans=1
-"endif
-"colorscheme solarized
+syntax enable
+set background=dark
+if $SSH_CONNECTION
+  let g:solarized_termcolors=256
+  let g:solarized_termtrans=1
+endif
+colorscheme solarized
+
+" Set up the cursorline to look nice enough
+set cursorline
+highlight CursorLineNR cterm=bold
+highlight CursorLine ctermbg=none
 
 " Gruvbox color scheme
-set background=dark
-colorscheme gruvbox
+"set background=dark
+"colorscheme gruvbox
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -188,26 +199,43 @@ nnoremap <leader>f :ALEFix<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 
+" TypeScript stuff
+autocmd FileType typescript,typescriptreact nnoremap <buffer> gh :lua vim.lsp.buf.hover()<CR>
+autocmd FileType typescript,typescriptreact nnoremap <buffer> gd :TypescriptGoToSourceDefinition<CR>
+autocmd FileType typescript,typescriptreact nnoremap <buffer> <leader>gd :vsplit \| TypescriptGoToSourceDefinition<CR>
+autocmd FileType typescript,typescriptreact nnoremap <buffer> <leader>m :TypescriptAddMissingImports<CR>
+autocmd FileType typescript,typescriptreact nnoremap <buffer> <leader>o :TypescriptOrganizeImports<CR>
+
+"" LSP stuff
+nnoremap <leader>e :lua vim.diagnostic.open_float()<CR>
+nnoremap <leader>r :lua vim.diagnostic.goto_next()<CR>
+nnoremap <leader>R :lua vim.diagnostic.goto_prev()<CR>
+
 "let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
+let g:ale_virtualtext_cursor=0
 let g:ale_linters = {
-\ 'javascript': ['eslint', 'flow'],
-\ 'ruby': ['rubocop', 'reek'],
-\ 'python': ['flake8', 'pylint', 'mypy'],
+\ 'javascript': ['eslint'],
+\ 'python': ['pylint', 'mypy'],
+\ 'rust': ['analyzer', 'cargo'],
 \}
 let g:ale_fixers = {
 \ 'javascript': ['prettier'],
 \ 'typescript': ['prettier'],
 \ 'typescriptreact': ['prettier'],
 \ 'python': ['black'],
-\ 'ruby': ['rubocop'],
 \ 'json': ['prettier'],
 \ 'css': ['prettier'],
+\ 'rust': ['rustfmt'],
 \}
 let g:ale_javascript_eslint_use_global = 1
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5'
 let g:ale_lint_delay = 1500
+" Cache successful and failed checks for executors to speed up loading and
+" saving files
+" (https://github.com/dense-analysis/ale/issues/1176#issuecomment-348149374)
+let g:ale_cache_executable_check_failures = 1
 
 " Airline settings
 set guifont=Meslo\ LG\ M\ for\ Powerline
@@ -320,4 +348,5 @@ vnoremap <leader>s y/"
 vnoremap <leader>S y:Ag "
 nnoremap <leader>v oconsole.log(<esc>a);<esc>hi
 
-lua require('config/treesitter')
+"lua require('config/treesitter')
+lua require('config/base')
